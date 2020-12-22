@@ -223,34 +223,33 @@ print('Testing data shape: ', test.shape)
 
 
 
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-
-# Make the model with the specified regularization parameter
-log_reg = LogisticRegression(C = 0.0001)
 
 x = train
 y = train_labels
-
 x_train, x_test, y_train, y_test = train_test_split( x, y, test_size=0.33, random_state=42)
-# Train on the training data
+
+
+
+from sklearn.linear_model import LogisticRegression
+log_reg = LogisticRegression(C = 0.0001)
 log_reg.fit(x_train, y_train)
-
-log_reg_pred = log_reg.predict_proba(x_test)[:, 1]
-
-roc_auc_score(y_test, log_reg_pred)
-
 
 
 from sklearn.ensemble import RandomForestClassifier
+ran_for = RandomForestClassifier(n_estimators = 100, random_state = 50, verbose = 1, n_jobs = -1)
+ran_for.fit(x_train, y_train)
 
-random_forest = RandomForestClassifier(n_estimators = 100, random_state = 50, verbose = 1, n_jobs = -1)
 
-random_forest.fit(x_train, y_train)
+from sklearn.naive_bayes import GaussianNB
+gnb = GaussianNB()
+gnb.fit(x_train, y_train)
 
-predictions = random_forest.predict_proba(x_test)[:, 1]
 
-roc_auc_score(y_test, predictions)
 
+from Functions import *
+
+classifiers = [log_reg, gnb, ran_for]
+
+plot_classifiers(classifiers, x_test, y_test)
 
