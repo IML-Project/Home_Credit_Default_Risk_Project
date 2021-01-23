@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np
+import math
 
 # Generic functions, that will universally work for any data frame
 
@@ -66,4 +67,32 @@ def data_correlation(train_frame, analysed_data_frame):
     analysed_data_frame = analysed_data_frame[analysed_data_frame['TARGET'].notna()]
     correlations = analysed_data_frame.corr()['TARGET'].sort_values()
     return correlations
+
+
+# Function used for convinient column deletion in the data frame
+def drop_columns(data_frame, columns):
+    for col in data_frame:
+        if col in columns:
+            data_frame = data_frame.drop(columns = col)
+    return data_frame
+    
+# Function used for deleting columns with a certain correlation (in regards to Target) below certain threshold:
+def remove_target_correlated_cols(data_frame, 
+                                  special_id = 'SK_ID_CURR', 
+                                  threshold = 0.04):
+    if 'TARGET' not in data_frame:
+        return data_frame
+    
+    corrs = data_frame.corr()
+    corrs = corrs.sort_values('TARGET', ascending = False)
+    
+    table = pd.DataFrame(corrs['TARGET'])
+    cols_to_delete = []
+    
+    for row in table.index:
+        if (abs(table.at[row, 'TARGET']) < threshold or math.isnan(table.at[row, 'TARGET'])) and row != special_id:
+            cols_to_delete.append(row)
+            
+    data_frame = data_frame.drop(columns = cols_to_delete)
+    return data_frame
     
