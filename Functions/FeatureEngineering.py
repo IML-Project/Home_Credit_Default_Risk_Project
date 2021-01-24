@@ -14,7 +14,7 @@ def group_numeric_values(data_frame,
     for column in data_frame:
         if column == 'TARGET':
             isTarget = True
-            target_cols = data_frame[[groupby_id, 'TARGET']]
+            target_cols = data_frame['TARGET']
             data_frame = data_frame.drop(columns = 'TARGET')
         if column != groupby_id and 'SK_ID' in column:
             data_frame = data_frame.drop(columns = column)
@@ -33,7 +33,7 @@ def group_numeric_values(data_frame,
                 
     grouped_data_frame.columns = new_columns
     if isTarget:
-        grouped_data_frame = grouped_data_frame.merge(target_cols, on = groupby_id, how = 'left')
+        grouped_data_frame['TARGET'] = target_cols['TARGET']
     return grouped_data_frame
 
 
@@ -107,11 +107,12 @@ def log_transform(data_frame, min_mean_value = 1000, groupby_id = 'SK_ID_CURR'):
             
     return data_frame;
 
-def normalization(data_frame, min_mean_value = 10, groupby_id = 'SK_ID_CURR'):
+def normalization(data_frame, min_mean_value = 100, groupby_id = 'SK_ID_CURR'):
     for column in data_frame:
         if column == groupby_id:
             continue
         if data_frame[column].mean() > min_mean_value:
             data_frame[f'{column}_norm'] = (data_frame[column] - data_frame[column].min()) / (data_frame[column].max() - data_frame[column].min())
+            
             
     return data_frame;
