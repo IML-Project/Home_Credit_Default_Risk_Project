@@ -35,4 +35,4 @@ def drop_missing_columns(data_frame, threshold = 70, print_info = True):
         data_frame = data_frame.drop(columns = missing_cols)
         
         return data_frame
-    
+
