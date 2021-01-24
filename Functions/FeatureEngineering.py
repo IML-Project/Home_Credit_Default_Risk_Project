@@ -95,4 +95,23 @@ def remove_target_correlated_cols(data_frame,
             
     data_frame = data_frame.drop(columns = cols_to_delete)
     return data_frame
-    
+   
+
+# Funtion applying log transformation to given data frame
+def log_transform(data_frame, min_mean_value = 1000, groupby_id = 'SK_ID_CURR'):
+    for column in data_frame:
+        if column == groupby_id:
+            continue
+        if data_frame[column].mean() > min_mean_value:
+            data_frame[f'{column}_log'] = (data_frame[column] + 1).transform(np.log)
+            
+    return data_frame;
+
+def normalization(data_frame, min_mean_value = 10, groupby_id = 'SK_ID_CURR'):
+    for column in data_frame:
+        if column == groupby_id:
+            continue
+        if data_frame[column].mean() > min_mean_value:
+            data_frame[f'{column}_norm'] = (data_frame[column] - data_frame[column].min()) / (data_frame[column].max() - data_frame[column].min())
+            
+    return data_frame;
