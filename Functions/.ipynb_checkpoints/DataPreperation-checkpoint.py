@@ -3,16 +3,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def fill_missing_values(data_frame, mean = True):  
-   if mean == True:
-
+    if mean == True:
         for column in data_frame:
             if type(data_frame[column]) is not object:
                 data_frame[column].fillna(data_frame[column].mean(), inplace = True)
-   else:
-        
+                
+    else: 
         for column in data_frame:
             if type(data_frame[column]) is not object:
-               data_frame[column].fillna(0, inplace = True)
+                data_frame[column].fillna(0, inplace = True)
+                
+    return data_frame
 
 def drop_missing_columns(data_frame, threshold = 70, print_info = True):
         df_missing = pd.DataFrame(data_frame.isnull().sum())
@@ -25,6 +26,8 @@ def drop_missing_columns(data_frame, threshold = 70, print_info = True):
             if len(missing_cols) > 10:
                 print('10 exemplary incomplete columns to be deleted: ')
                 print(missing_cols[0:10])
+            elif len(missing_cols) == 0:
+                print("No columns will be deleted")
             else:
                 print('Incomplete columns: ')
                 print(missing_cols)
