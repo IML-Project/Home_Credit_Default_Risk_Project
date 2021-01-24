@@ -79,7 +79,7 @@ def drop_columns(data_frame, columns):
 # Function used for deleting columns with a certain correlation (in regards to Target) below certain threshold:
 def remove_target_correlated_cols(data_frame, 
                                   special_id = 'SK_ID_CURR', 
-                                  threshold = 0.04):
+                                  threshold = 0.01):
     if 'TARGET' not in data_frame:
         return data_frame
     
